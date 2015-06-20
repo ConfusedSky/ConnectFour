@@ -19,6 +19,7 @@ public class AI
 		rand = new Random();
 		player = p;
 	}
+	
 
 	public AI( bool p, Random r )
 	{
