@@ -207,6 +207,7 @@ public class Game
 		g.DrawBoard();
 		while( !done )
 		{
+			Console.WriteLine( "Your Turn!" );
 			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
 			{
 				Console.WriteLine( "Improper move try again\n" );
@@ -220,6 +221,7 @@ public class Game
 				Console.WriteLine( "Player Wins!" );
 				continue;
 			}
+			Console.WriteLine( "Computer is thinking..." );
 			ai.MakeMove( g );
 			Console.Clear();
 			g.DrawBoard();
