@@ -93,7 +93,7 @@ public class AI
 			// new gamestate
 			GameNode g2;
 			// best score
-			double bestScore = ((playing)?(1):(-1)) * -double.MaxValue;
+			double bestScore = -double.MaxValue;
 			for( int j = 1; j < 8; j++ )
 			{
 				// if this is a valid move
@@ -110,7 +110,7 @@ public class AI
 					// if the current score is the best one set the return value to j
 					// and the best value to g2.Score
 					// if they are the same there is a 50 50 chance it will choose the new one
-					if( ( (g2.Score > bestScore) && playing ) || ( (g2.Score < bestScore) && !playing ) || (g2.Score == bestScore && rand.Next( 0, 2 ) == 0)  )
+					if( ( (g2.Score > bestScore) && playing ) || (g2.Score == bestScore && rand.Next( 0, 2 ) == 0)  )
 					{
 						i = j;
 						bestScore = g2.Score;
