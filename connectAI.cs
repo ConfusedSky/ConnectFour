@@ -105,7 +105,7 @@ public class AI
 			// new gamestate
 			GameNode g2;
 			// best score
-			double bestScore = 0;
+			double bestScore = -double.MaxValue;
 			for( int j = 1; j < 8; j++ )
 			{
 				// if this is a valid move
