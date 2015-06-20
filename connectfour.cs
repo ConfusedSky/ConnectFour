@@ -202,16 +202,18 @@ public class Game
 		AI ai = new AI( false, r );
 		AI ai2 = new AI( true, r );
 		bool done = false;
+
+		Console.Clear();
+		g.DrawBoard();
 		while( !done )
 		{
-			Console.Clear();
-			Console.WriteLine( "Game 2" );
-			g.DrawBoard();
 			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
 			// {
 			// 	Console.WriteLine( "Improper move try again\n" );
 			// }
 			ai2.MakeMove( g );
+			Console.Clear();
+			g.DrawBoard();
 			if( g.IsWinner( true ) )
 			{
 				done = true;
@@ -219,6 +221,10 @@ public class Game
 				continue;
 			}
 			ai.MakeMove( g );
+			// Console.WriteLine( "Press the any key to continue. . ." );
+			// Console.ReadKey( true );
+			Console.Clear();
+			g.DrawBoard();
 			if( g.IsWinner( false ) )
 			{
 				done = true;
@@ -232,7 +238,6 @@ public class Game
 				continue;
 			}
 		}
-		g.DrawBoard();
 
 		Console.WriteLine( "Press the any key to continue. . ." );
 		Console.ReadKey( true );

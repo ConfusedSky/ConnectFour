@@ -85,14 +85,19 @@ public class AI
 		// move with the best score
 		int i;
 		// stop at layer 7 or when there are no more moves left
-		if( layer == 9 || !g.Gamestate.MovesAvailable() )
+		if( !g.Gamestate.MovesAvailable() )
 		{
 			i = 0;
 		}
 		// if playing player can win
 		else if( CanWin( g.Gamestate, !(playing ^ player), out i ) )
 		{
-			g.Score = ((playing)?(1):(-1)) * Math.Pow( 1.2 , maxLayer-layer );
+			g.Score = ((playing)?(1):(-1)) * Math.Pow( 1.2, (maxLayer-layer+1)/2 );
+		}
+		// cuttoff before new nodes are made but after can win is calculated
+		else if( layer == 7 )
+		{
+			i = 0;
 		}
 		// generate new nodes and calculate choice from there
 		else
@@ -121,6 +126,10 @@ public class AI
 						i = j;
 						bestScore = g2.Score;
 					}
+					// if( layer < 2 )
+					// {
+					// 	Console.WriteLine( "{0} {1} {2} {3}", layer, i, bestScore, g2.Score );
+					// }
 				}
 			}
 		}
