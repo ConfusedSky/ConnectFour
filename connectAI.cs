@@ -45,8 +45,6 @@ public class AI
 			g.MakeMove( i, player );
 			return;
 		}
-		
-		
 	}	
 
 	// private helper function which determines if a player can win in one move
