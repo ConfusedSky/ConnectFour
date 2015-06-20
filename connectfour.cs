@@ -199,6 +199,7 @@ public class Game
 		while( !done )
 		{
 			Console.Clear();
+			Console.WriteLine( "Game 1" );
 			g.DrawBoard();
 			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
 			// {
