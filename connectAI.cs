@@ -45,22 +45,22 @@ public class AI
 			g.MakeMove( i, player );
 			return;
 		}
-		// else choose a random move that wont give the player a win
-		int r;
-		const int MAXTRIES = 500;
-		// number of tries before giving up and trying something completely random
-		int tries = 0;
-		// make sure the move is a valid move
-		bool valid;
-		do 
-		{
-			r = rand.Next( 1, 8 );
-			gprime = new Game( g.Board );
-			valid = gprime.MakeMove( r, player );
-			tries++;
-			// while the player can win in the next move or the next move is not valid
-		} while( ( CanWin( gprime, !player, out i ) && tries < MAXTRIES ) || !valid  );
-		g.MakeMove( r, player );
+		// else choose a random move that wont give the player a win		
+-		int r;		
+-		const int MAXTRIES = 500;		
+-		// number of tries before giving up and trying something completely random		
+-		int tries = 0;		
+-		// make sure the move is a valid move		
+-		bool valid;		
+-		do 		
+-		{		
+-			r = rand.Next( 1, 8 );		
+-			gprime = new Game( g.Board );		
+-			valid = gprime.MakeMove( r, player );		
+-			tries++;		
+-			// while the player can win in the next move or the next move is not valid		
+-		} while( ( CanWin( gprime, !player, out i ) && tries < MAXTRIES ) || !valid  );		
+-		g.MakeMove( r, player );
 	}	
 
 	// private helper function which determines if a player can win in one move
