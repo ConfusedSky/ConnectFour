@@ -1,1 +1,1 @@
-mcs connectfour.cs connectAI.cs /out:ConnectFourv2.exe
+mcs connectfour.cs connectAI.cs /out:"connectfour v2.exe"
