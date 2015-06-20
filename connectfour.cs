@@ -199,12 +199,13 @@ public class Game
 		while( !done )
 		{
 			Console.Clear();
+			Console.WriteLine( "Game 2" );
 			g.DrawBoard();
-			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			// {
-			// 	Console.WriteLine( "Improper move try again\n" );
-			// }
-			ai2.MakeMove( g );
+			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+			{
+				Console.WriteLine( "Improper move try again\n" );
+			}
+			// ai2.MakeMove( g );
 			if( g.IsWinner( true ) )
 			{
 				done = true;
