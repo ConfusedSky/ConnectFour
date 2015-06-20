@@ -15,8 +15,6 @@ public class AI
 	private Random rand;
 	// Whether this is an X(true) or an O(false)
 	private bool player;
-	// max layer attained in the tree
-	private int maxLayer;
 
 	// Node that represents a move in the tree
 	private class GameNode
@@ -47,15 +45,8 @@ public class AI
 
 	// Lets the AI make its move
 	// takes the game its playing and a token its using
-	public void MakeMove( Game g )
-	{
-		// Choose the best move possible
-		int i = ChooseBestMove( g );
-		g.MakeMove( i, player );
-	}	
-
 	// Chooses next move based on a tree of possible moves and min maxes its way up the tree
-	private int ChooseBestMove( Game g )
+	public void MakeMove( Game g )
 	{
 		// if any moves will result in a win use it
 		// and block any wins that the player might have
@@ -65,12 +56,13 @@ public class AI
 		else if( CanWin( g, !player, out i ) );
 		else 
 		{
-			maxLayer = 0;
 			i = RecurseBestMove( new GameNode(g) );
 		}
 
-		return i;
+		g.MakeMove( i, player );
 	}
+
+	const int MAXLAYER = 7;
 
 	// recursive method to choose the best move based on a minmax tree
 	// Gamenode is the current state of the game
@@ -78,13 +70,9 @@ public class AI
 	// playing is if we are playing or the other player is playing
 	private int RecurseBestMove( GameNode g, int layer = 0, bool playing = true )
 	{
-		if( maxLayer < layer )
-		{
-			maxLayer = layer;
-		}
 		// move with the best score
 		int i;
-		// stop at layer 7 or when there are no more moves left
+		// when there are no more moves left
 		if( !g.Gamestate.MovesAvailable() )
 		{
 			i = 0;
@@ -92,10 +80,10 @@ public class AI
 		// if playing player can win
 		else if( CanWin( g.Gamestate, !(playing ^ player), out i ) )
 		{
-			g.Score = ((playing)?(1):(-1)) * Math.Pow( 1.2, (maxLayer-layer+1)/2 );
+			g.Score = ((playing)?(1):(-1)) * Math.Pow( 1.2, (MAXLAYER-layer+1) );
 		}
 		// cuttoff before new nodes are made but after can win is calculated
-		else if( layer == 7 )
+		else if( layer == MAXLAYER )
 		{
 			i = 0;
 		}
@@ -105,7 +93,7 @@ public class AI
 			// new gamestate
 			GameNode g2;
 			// best score
-			double bestScore = -double.MaxValue;
+			double bestScore = ((playing)?(1):(-1)) * -double.MaxValue;
 			for( int j = 1; j < 8; j++ )
 			{
 				// if this is a valid move
@@ -121,15 +109,17 @@ public class AI
 					g.Score += g2.Score;
 					// if the current score is the best one set the return value to j
 					// and the best value to g2.Score
-					if( g2.Score > bestScore )
+					// if they are the same there is a 50 50 chance it will choose the new one
+					if( ( (g2.Score > bestScore) && playing ) || ( (g2.Score < bestScore) && !playing ) || (g2.Score == bestScore && rand.Next( 0, 2 ) == 0)  )
 					{
 						i = j;
 						bestScore = g2.Score;
 					}
-					// if( layer < 2 )
-					// {
-					// 	Console.WriteLine( "{0} {1} {2} {3}", layer, i, bestScore, g2.Score );
-					// }
+					// debug code
+					if( layer < 2 )
+					{
+						Console.WriteLine( "{0} {1} {2}", i, bestScore, g2.Score );
+					}
 				}
 			}
 		}
