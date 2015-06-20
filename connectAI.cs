@@ -110,7 +110,7 @@ public class AI
 					// if the current score is the best one set the return value to j
 					// and the best value to g2.Score
 					// if they are the same there is a 50 50 chance it will choose the new one
-					if( ( (g2.Score > bestScore) && playing ) || (g2.Score == bestScore && rand.Next( 0, 2 ) == 0)  )
+					if( ( g2.Score > bestScore ) || (g2.Score == bestScore && rand.Next( 0, 2 ) == 0)  )
 					{
 						i = j;
 						bestScore = g2.Score;
