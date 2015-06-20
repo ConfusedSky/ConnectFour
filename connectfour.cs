@@ -77,7 +77,7 @@ public class Game
 			return false;
 		}
 		// column is full
-		if( _board[0,choice-1] != ' ' )
+		if( !ValidMove( choice ) )
 		{
 			return false;
 		}
@@ -175,13 +175,19 @@ public class Game
 		return false;
 	}
 
+	// checks to see if move is valid
+	public bool ValidMove( int i )
+	{
+		return _board[0, i-1] == ' ';
+	}
+
 	// this will return true if there are any available movies to be played
 	public bool MovesAvailable()
 	{
 		// look at the top of each column of the board to see if there is any empty space
-		for( int i = 0; i < 7; i++ )
+		for( int i = 1; i < 8; i++ )
 		{
-			if( _board[0, i] == ' ' )
+			if( ValidMove( i ) )
 			{
 				return true;
 			}
@@ -201,11 +207,11 @@ public class Game
 			Console.Clear();
 			Console.WriteLine( "Game 2" );
 			g.DrawBoard();
-			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			{
-				Console.WriteLine( "Improper move try again\n" );
-			}
-			// ai2.MakeMove( g );
+			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+			// {
+			// 	Console.WriteLine( "Improper move try again\n" );
+			// }
+			ai2.MakeMove( g );
 			if( g.IsWinner( true ) )
 			{
 				done = true;
