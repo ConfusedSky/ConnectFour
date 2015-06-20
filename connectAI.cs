@@ -115,11 +115,11 @@ public class AI
 						i = j;
 						bestScore = g2.Score;
 					}
-					// debug code
-					if( layer < 2 )
-					{
-						Console.WriteLine( "{0} {1} {2}", i, bestScore, g2.Score );
-					}
+					// // debug code
+					// if( layer < 2 )
+					// {
+					// 	Console.WriteLine( "{0} {1} {2}", i, bestScore, g2.Score );
+					// }
 				}
 			}
 		}
