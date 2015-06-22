@@ -82,7 +82,7 @@ public class AI
 		// if the playing player can go
 		else if( CanWin( g.Gamestate, !(playing ^ player ), out i ) )
 		{
-			g.Score = ( (playing)?(1):(-1) ) * Math.Pow( 1.2, layer);
+			g.Score = ( (playing)?(1):(-1) ) * Math.Pow( 1.2, layer );
 		}
 		// else if we are at the end calculate the score of each terminal node that isnt a win
 		else if( layer == 0 )
@@ -104,7 +104,6 @@ public class AI
 					g2.Gamestate.MakeMove( j, player );
 					// run this method again for the new move
 					RecurseBestMove( g2, layer - 1, alpha, beta, false );
-					g.Score += g2.Score;
 					// if the current score is the best one set the return value to j
 					// and the best value to g2.Score
 					// if they are the same there is a 50 50 chance it will choose the new one
@@ -125,6 +124,7 @@ public class AI
 					}
 				}
 			}
+			g.Score = bestScore;
 		}
 		else
 		{
