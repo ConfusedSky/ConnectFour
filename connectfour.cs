@@ -200,7 +200,7 @@ public class Game
 		Random r = new Random();
 		Game g = new Game();
 		AI ai = new AI( false, r );
-		// AI ai2 = new AI( true, r );
+		AI ai2 = new AI( true, r );
 		bool done = false;
 
 		Console.Clear();
@@ -208,11 +208,11 @@ public class Game
 		while( !done )
 		{
 			Console.WriteLine( "Your Turn!" );
-			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			{
-				Console.WriteLine( "Improper move try again\n" );
-			}
-			// ai2.MakeMove( g );
+			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+			// {
+			// 	Console.WriteLine( "Improper move try again\n" );
+			// }
+			ai2.MakeMove( g );
 			Console.Clear();
 			g.DrawBoard();
 			if( g.IsWinner( true ) )
