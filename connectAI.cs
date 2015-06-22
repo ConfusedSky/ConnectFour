@@ -56,7 +56,7 @@ public class AI
 		else if( CanWin( g, !player, out i ) );
 		else 
 		{
-			i = RecurseBestMove( new GameNode(g), 10 );
+			i = RecurseBestMove( new GameNode(g), 8 );
 		}
 
 		g.MakeMove( i, player );
@@ -74,19 +74,15 @@ public class AI
 		GameNode g2;
 		// best score
 		double bestScore;
-		// if there are no moves left this node is a zero score
-		if( !g.Gamestate.MovesAvailable() )
-		{
-			i = 0;
-		}
 		// if the playing player can go
-		else if( CanWin( g.Gamestate, !(playing ^ player ), out i ) )
+		if( CanWin( g.Gamestate, !(playing ^ player ), out i ) )
 		{
-			g.Score = ( (playing)?(1):(-1) ) * Math.Pow( 1.2, layer );
+			g.Score = ( (playing)?(1e10):(-1e10) ) * (layer/2 + 1);
 		}
 		// else if we are at the end calculate the score of each terminal node that isnt a win
 		else if( layer == 0 )
 		{
+			g.Score = CalculatePosition( g.Gamestate, player );
 			i = 0;
 		}
 		// else generate new nodes and run the minmax algorithm
@@ -140,6 +136,7 @@ public class AI
 					g2.Gamestate.MakeMove( j, !player );
 					// run this method again for the new move
 					RecurseBestMove( g2, layer - 1, alpha, beta, true );
+					
 					// if the current score is the best one set the return value to j
 					// and the best value to g2.Score
 					// if they are the same there is a 50 50 chance it will choose the new one
@@ -166,69 +163,87 @@ public class AI
 		return i;
 	}
 
-	// const int MAXLAYER = 7;
+	// returns the value of the current gamestate
+	public static double CalculatePosition( Game g, bool player = true )
+	{
+		// calculated value, positive if its our token negative if its theirs, current lines value
+		double d = 0, x = 0, y = 0;
+		// gameboard
+		char[,] board = g.Board;
+		// whether this token is one of ours or one of theirs
+		char token, otherToken;
+		// represents all of the directions
+		int[,] direction = 
+		{
+			{ -1, -1 },
+			{ -1,  0 },
+			{ -1,  1 },
+			{  0,  1 },
+			{  1,  1 },
+			{  1,  0 },
+			{  1, -1 },
+			{  0, -1 }
+		};
 
-	// // recursive method to choose the best move based on a minmax tree
-	// // Gamenode is the current state of the game
-	// // layer is how many nodes down we are
-	// // playing is if we are playing or the other player is playing
-	// private int RecurseBestMove( GameNode g, int layer = 0, bool playing = true )
-	// {
-	// 	// move with the best score
-	// 	int i;
-	// 	// when there are no more moves left
-	// 	if( !g.Gamestate.MovesAvailable() )
-	// 	{
-	// 		i = 0;
-	// 	}
-	// 	// if playing player can win
-	// 	else if( CanWin( g.Gamestate, !(playing ^ player), out i ) )
-	// 	{
-	// 		g.Score = ((playing)?(1):(-1)) * Math.Pow( 1.2, (MAXLAYER-layer+1) );
-	// 	}
-	// 	// cuttoff before new nodes are made but after can win is calculated
-	// 	else if( layer == MAXLAYER )
-	// 	{
-	// 		i = 0;
-	// 	}
-	// 	// generate new nodes and calculate choice from there
-	// 	else
-	// 	{
-	// 		// new gamestate
-	// 		GameNode g2;
-	// 		// best score
-	// 		double bestScore = -double.MaxValue;
-	// 		for( int j = 1; j < 8; j++ )
-	// 		{
-	// 			// if this is a valid move
-	// 			if( g.Gamestate.ValidMove( j ) )
-	// 			{
-	// 				// make a new node
-	// 				g2 = new GameNode( new Game( g.Gamestate.Board ) );
-	// 				// make the move
-	// 				g2.Gamestate.MakeMove( j, !(playing ^ player) );
-	// 				// run this method again for the new move
-	// 				RecurseBestMove( g2, layer + 1, !playing );
-	// 				// add the new score to this one
-	// 				g.Score += g2.Score;
-	// 				// if the current score is the best one set the return value to j
-	// 				// and the best value to g2.Score
-	// 				// if they are the same there is a 50 50 chance it will choose the new one
-	// 				if( ( g2.Score > bestScore ) || (g2.Score == bestScore && rand.Next( 0, 2 ) == 0)  )
-	// 				{
-	// 					i = j;
-	// 					bestScore = g2.Score;
-	// 				}
-	// 				// // debug code
-	// 				// if( layer < 2 )
-	// 				// {
-	// 				// 	Console.WriteLine( "{0} {1} {2}", i, bestScore, g2.Score );
-	// 				// }
-	// 			}
-	// 		}
-	// 	}
-	// 	return i;
-	// }
+		for( int i = 0; i < 6; i++ )
+		{
+			for( int j = 0; j < 7; j++ )
+			{
+				// initialize x to zero
+				x = 0;
+				token = board[i,j];
+				otherToken = ( token == 'X' )?'O':'X';
+				if( token == ((player)?'X':'O') )
+				{
+					x = 1;
+				}
+				else if( token == ((!player)?'X':'O') )
+				{
+					x = -1;
+				}
+
+				// if there is an adjacent token of the same type
+				if( x != 0 )
+				{
+					// go in a direction until you hit something that isn't 
+					for( int k = 0; k < 8; k++ )
+					{
+						// lines value is initialized to be either positive or negative depending on the token
+						y = x;
+						// look along the line
+						for( int l = 1; l <= 3; l++ )
+						{
+							// if we reach a dead end 
+							if( ( i+l*direction[k,0] < 0 || i+l*direction[k,0] >= 6 ||
+								  j+l*direction[k,1] < 0 || j+l*direction[k,1] >= 7 ||
+								  board[ i+l*direction[k,0], j+l*direction[k,1] ] == otherToken ) )		
+							{
+								// and there is a dead end on the other side too this line is worth nothing
+								if( ( i-direction[k,0] < 0 || i-direction[k,0] >= 6 ||
+								      j-direction[k,1] < 0 || j-direction[k,1] >= 7 ||
+								      board[ i-direction[k,0], j-direction[k,1] ] == otherToken ) )
+								{
+									y = 0;
+								}
+								// regardless we break
+								break;
+							}
+							// however if we run into another one of our own its worth more points
+							if( board[ i+l*direction[k,0], j+l*direction[k,1] ] == token )
+							{
+								y *= 7;
+							}
+						}
+						// add current line to total
+						d += y;
+					}
+				}
+			}
+		}
+
+		// for tests if a token is next to a token of the same color 
+		return d;
+	}
 
 	// private helper function which determines if a player can win in one move
 	private bool CanWin( Game g, bool player, out int move )

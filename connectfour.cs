@@ -97,81 +97,36 @@ public class Game
 	public bool IsWinner( bool player )
 	{
 		char token = ((player)?'X':'O');
+		int[,] limits = 
+		{
+			// i lower, i upper, j lower, j upper, k multiplier for i, k multiplier for j
+			{ 0, 3, 0, 7,  1, 0 }, // vertical
+			{ 0, 6, 0, 4,  0, 1 }, // horizontal
+			{ 0, 3, 0, 4,  1, 1 }, // downright
+			{ 3, 6, 0, 4, -1, 1 } // upright
+		};
 
-		int i, j, k;
-		// vertical wins
-		for( i = 0; i < 6-3; i++ )
+		int i, j, k, l;
+		for( l = 0; l < 4; l++ )
 		{
-			for( j = 0; j < 7; j++ )
+			for( i = limits[l,0]; i < limits[l,1]; i++ )
 			{
-				for( k = 0; k < 4; k++ )
+				for( j = limits[l,2]; j < limits[l,3]; j++ )
 				{
-					if( _board[i+k,j] != token )
+					for( k = 0; k < 4; k++ )
 					{
-						break;
+						if( _board[i+k*limits[l,4],j+k*limits[l,5]] != token )
+						{
+							break;
+						}
 					}
-				}
-				if( k == 4 )
-				{
-					return true;
+					if( k == 4 )
+					{
+						return true;
+					}
 				}
 			}
 		}
-		// horizontal wins
-		for( i = 0; i < 6; i++ )
-		{
-			for( j = 0; j < 7-3; j++ )
-			{
-				for( k = 0; k < 4; k++ )
-				{
-					if( _board[i,j+k] != token )
-					{
-						break;
-					}
-				}
-				if( k == 4 )
-				{
-					return true;
-				}
-			}
-		}
-		// downright wins
-		for( i = 0; i < 6-3; i++ )
-		{
-			for( j = 0; j < 7-3; j++ )
-			{
-				for( k = 0; k < 4; k++ )
-				{
-					if( _board[i+k,j+k] != token )
-					{
-						break;
-					}
-				}
-				if( k == 4 )
-				{
-					return true;
-				}
-			}
-		}
-		// downright wins
-		for( i = 3; i < 6; i++ )
-		{
-			for( j = 0; j < 7-3; j++ )
-			{
-				for( k = 0; k < 4; k++ )
-				{
-					if( _board[i-k,j+k] != token )
-					{
-						break;
-					}
-				}
-				if( k == 4 )
-				{
-					return true;
-				}
-			}
-		}
-
 		return false;
 	}
 
@@ -207,6 +162,7 @@ public class Game
 		g.DrawBoard();
 		while( !done )
 		{
+			// Console.WriteLine( AI.CalculatePosition( g ) );
 			Console.WriteLine( "Your Turn!" );
 			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
 			// {
@@ -221,7 +177,12 @@ public class Game
 				Console.WriteLine( "Player Wins!" );
 				continue;
 			}
+			// Console.WriteLine( AI.CalculatePosition( g ) );
 			Console.WriteLine( "Computer is thinking..." );
+			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', false ) )
+			// {
+			// 	Console.WriteLine( "Improper move try again\n" );
+			// }
 			ai.MakeMove( g );
 			Console.Clear();
 			g.DrawBoard();
