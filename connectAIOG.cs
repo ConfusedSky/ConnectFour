@@ -9,18 +9,18 @@
 
 using System;
 
-public class AI
+public class OGAI
 {
 	private Random rand;
 	private bool player;
 
-	public AI( bool p )
+	public OGAI( bool p )
 	{
 		rand = new Random();
 		player = p;
 	}
 
-	public AI( bool p, Random r )
+	public OGAI( bool p, Random r )
 	{
 		rand = r;
 		player = p;

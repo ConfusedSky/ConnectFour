@@ -164,11 +164,11 @@ public class Game
 		{
 			Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
 			Console.WriteLine( "Your Turn!" );
-			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			{
-				Console.WriteLine( "Improper move try again\n" );
-			}
-			// ai2.MakeMove( g );
+			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+			// {
+			// 	Console.WriteLine( "Improper move try again\n" );
+			// }
+			ai2.MakeMove( g );
 			Console.Clear();
 			g.DrawBoard();
 			if( g.IsWinner( true ) )
