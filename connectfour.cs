@@ -162,13 +162,13 @@ public class Game
 		g.DrawBoard();
 		while( !done )
 		{
-			Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
+			// Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
 			Console.WriteLine( "Your Turn!" );
-			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			// {
-			// 	Console.WriteLine( "Improper move try again\n" );
-			// }
-			ai2.MakeMove( g );
+			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+			{
+				Console.WriteLine( "Improper move try again\n" );
+			}
+			// ai2.MakeMove( g );
 			Console.Clear();
 			g.DrawBoard();
 			if( g.IsWinner( true ) )
@@ -177,7 +177,7 @@ public class Game
 				Console.WriteLine( "Player Wins!" );
 				continue;
 			}
-			Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
+			// Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
 			Console.WriteLine( "Computer is thinking..." );
 			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', false ) )
 			// {
