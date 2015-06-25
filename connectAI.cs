@@ -51,13 +51,8 @@ public class AI
 		// if any moves will result in a win use it
 		// and block any wins that the player might have
 		int i;
-		
-		if( CanWin( g, player, out i ) );
-		else if( CanWin( g, !player, out i ) );
-		else 
-		{
-			i = RecurseBestMove( new GameNode(g), 8 );
-		}
+
+		i = RecurseBestMove( new GameNode(g), 9 );
 
 		g.MakeMove( i, player );
 	}
@@ -74,10 +69,15 @@ public class AI
 		GameNode g2;
 		// best score
 		double bestScore;
-		// if the playing player can go
+		// if the playing player can win
 		if( CanWin( g.Gamestate, !(playing ^ player ), out i ) )
 		{
 			g.Score = ( (playing)?(1e10):(-1e10) ) * (layer/2 + 1);
+		}
+		// if the not playing player can win block the win
+		else if( CanWin( g.Gamestate, (playing ^ player ), out i ) )
+		{
+			g.Score = ( (!playing)?(1e10):(-1e10) ) * (layer/2 + 1);
 		}
 		// else if we are at the end calculate the score of each terminal node that isnt a win
 		else if( layer == 0 )
@@ -164,10 +164,10 @@ public class AI
 	}
 
 	// returns the value of the current gamestate
-	public static double CalculatePosition( Game g, bool player = true )
+	public static double CalculatePosition( Game g, bool player = true, bool debug = false )
 	{
-		// calculated value, positive if its our token negative if its theirs, current lines value
-		double d = 0, x = 0, y = 0;
+		// calculated value, positive if its our token negative if its theirs, current lines value, number of found tokens
+		double d = 0, x = 0, y = 0, n = 0, z = 0;
 		// gameboard
 		char[,] board = g.Board;
 		// whether this token is one of ours or one of theirs
@@ -202,6 +202,8 @@ public class AI
 					x = -1;
 				}
 
+				z = 0;
+
 				// if there is an adjacent token of the same type
 				if( x != 0 )
 				{
@@ -210,6 +212,8 @@ public class AI
 					{
 						// lines value is initialized to be either positive or negative depending on the token
 						y = x;
+						// we have found one
+						n = 1;
 						// look along the line
 						for( int l = 1; l <= 3; l++ )
 						{
@@ -218,10 +222,10 @@ public class AI
 								  j+l*direction[k,1] < 0 || j+l*direction[k,1] >= 7 ||
 								  board[ i+l*direction[k,0], j+l*direction[k,1] ] == otherToken ) )		
 							{
-								// and there is a dead end on the other side too this line is worth nothing
-								if( ( i-direction[k,0] < 0 || i-direction[k,0] >= 6 ||
-								      j-direction[k,1] < 0 || j-direction[k,1] >= 7 ||
-								      board[ i-direction[k,0], j-direction[k,1] ] == otherToken ) )
+								// // and there is a dead end on the other side too this line is worth nothing
+								// if( ( i-direction[k,0] < 0 || i-direction[k,0] >= 6 ||
+								//       j-direction[k,1] < 0 || j-direction[k,1] >= 7 ||
+								//       board[ i-direction[k,0], j-direction[k,1] ] == otherToken ) )
 								{
 									y = 0;
 								}
@@ -231,14 +235,19 @@ public class AI
 							// however if we run into another one of our own its worth more points
 							if( board[ i+l*direction[k,0], j+l*direction[k,1] ] == token )
 							{
-								y *= 7;
+								y *= Math.Pow( 7, n );
+								n++;
 							}
 						}
 						// add current line to total
 						d += y;
+						z += y;
 					}
 				}
+
+				if( debug ) Console.Write( "{0,-5}", z );
 			}
+			if( debug ) Console.WriteLine();
 		}
 
 		// for tests if a token is next to a token of the same color 
