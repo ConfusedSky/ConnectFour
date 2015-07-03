@@ -208,11 +208,11 @@ public class Game
 		while( !done )
 		{
 			Console.WriteLine( "Your Turn!" );
-			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			// {
-			// 	Console.WriteLine( "Improper move try again\n" );
-			// }
-			ai2.MakeMove( g );
+			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+			{
+				Console.WriteLine( "Improper move try again\n" );
+			}
+			// ai2.MakeMove( g );
 			Console.Clear();
 			g.DrawBoard();
 			if( g.IsWinner( true ) )
