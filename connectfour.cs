@@ -199,8 +199,8 @@ public class Game
 	{
 		Random r = new Random();
 		Game g = new Game();
-		AI ai2 = new AI( true, r );
-		OGAI ai = new OGAI( false, r );
+		AI ai = new AI( false, r );
+		OGAI ai2 = new OGAI( true, r );
 		bool done = false;
 
 		Console.Clear();
