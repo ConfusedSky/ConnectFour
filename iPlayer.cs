@@ -1,6 +1,7 @@
 // All players ai or human need to implement this interface
-public interface iPlayer
+public interface IPlayer
 {
+	// Also responsible for printing out some text
 	// chooses the move to make next
-	public int MakeMove( Game g );
+	int MakeMove( Game g );
 }

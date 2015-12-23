@@ -149,55 +149,98 @@ public class Game
 		return false;
 	}
 
-	public static void Main()
+	// Plays a game and returns true if player 1 wins
+	public bool playGame()
 	{
-		Random r = new Random();
-		Game g = new Game();
-		AI ai = new AI( false, r );
-		AI ai2 = new AI( true, r );
-		bool done = false;
+		IPlayer p1 = new HumanPlayer();
+		IPlayer p2 = new HumanPlayer();
 
 		Console.Clear();
-		g.DrawBoard();
-		while( !done )
+		DrawBoard();
+
+		while( true )
 		{
-			// Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
-			Console.WriteLine( "Your Turn!" );
-			while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
-			{
-				Console.WriteLine( "Improper move try again\n" );
-			}
-			// ai2.MakeMove( g );
+			MakeMove( p1.MakeMove( new Game( Board ) ), true );
+
 			Console.Clear();
-			g.DrawBoard();
-			if( g.IsWinner( true ) )
+			DrawBoard();
+
+			if( IsWinner( true ) )
 			{
-				done = true;
-				Console.WriteLine( "Player Wins!" );
-				continue;
+				Console.WriteLine( "Player 1 Wins!" );
+				return true;
 			}
-			// Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
-			Console.WriteLine( "Computer is thinking..." );
-			// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', false ) )
-			// {
-			// 	Console.WriteLine( "Improper move try again\n" );
-			// }
-			ai.MakeMove( g );
+
+			MakeMove( p2.MakeMove( new Game( Board ) ), false );
+
 			Console.Clear();
-			g.DrawBoard();
-			if( g.IsWinner( false ) )
+			DrawBoard();
+
+			if( IsWinner( false ) )
 			{
-				done = true;
-				Console.WriteLine( "Computer Wins!" );
-				continue;
+				Console.WriteLine( "Player 2 Wins!" );
+				return false;
 			}
-			if( !g.MovesAvailable() )
+
+			if( !MovesAvailable() )
 			{
-				done = true;
-				Console.WriteLine( "Its a Draw!" );
-				continue;
+				Console.WriteLine( "It's a draw!" );
+				return false;
 			}
 		}
+	}
+
+	public static void Main()
+	{
+		// Random r = new Random();
+		Game g = new Game();
+		// AI ai = new AI( false, r );
+		// AI ai2 = new AI( true, r );
+		// bool done = false;
+
+		// Console.Clear();
+		// g.DrawBoard();
+		// while( !done )
+		// {
+		// 	// Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
+		// 	Console.WriteLine( "Your Turn!" );
+		// 	while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', true ) )
+		// 	{
+		// 		Console.WriteLine( "Improper move try again\n" );
+		// 	}
+		// 	// ai2.MakeMove( g );
+		// 	Console.Clear();
+		// 	g.DrawBoard();
+		// 	if( g.IsWinner( true ) )
+		// 	{
+		// 		done = true;
+		// 		Console.WriteLine( "Player Wins!" );
+		// 		continue;
+		// 	}
+		// 	// Console.WriteLine( AI.CalculatePosition( g, debug: true ) );
+		// 	Console.WriteLine( "Computer is thinking..." );
+		// 	// while( !g.MakeMove( Console.ReadKey(true).KeyChar - '0', false ) )
+		// 	// {
+		// 	// 	Console.WriteLine( "Improper move try again\n" );
+		// 	// }
+		// 	ai.MakeMove( g );
+		// 	Console.Clear();
+		// 	g.DrawBoard();
+		// 	if( g.IsWinner( false ) )
+		// 	{
+		// 		done = true;
+		// 		Console.WriteLine( "Computer Wins!" );
+		// 		continue;
+		// 	}
+		// 	if( !g.MovesAvailable() )
+		// 	{
+		// 		done = true;
+		// 		Console.WriteLine( "Its a Draw!" );
+		// 		continue;
+		// 	}
+		// }
+
+		g.playGame();
 
 		Console.WriteLine( "Press the any key to continue. . ." );
 		Console.ReadKey( true );
