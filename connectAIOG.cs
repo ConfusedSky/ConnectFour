@@ -45,7 +45,7 @@ public class OGAI
 			g.MakeMove( i, player );
 			return;
 		}
-		// else choose a random move that wont give the player a win		\
+		// else choose a random move that wont give the player a win
 		int r;		
 		const int MAXTRIES = 500;		
 		// number of tries before giving up and trying something completely random		

@@ -17,9 +17,7 @@ public class Game
 	public char[,] Board { 
 		get 
 		{
-			char[,] b = new char[6,7];
-			Array.Copy( _board, b, 6*7 );
-			return b;
+			return _board;
 		}
 	}
 
@@ -39,7 +37,8 @@ public class Game
 	// copy constuctor
 	public Game( char[,] b )
 	{
-		_board = b;
+		_board = new char[6,7];
+		Array.Copy( b, _board, 6*7 );
 	}
 
 	public void DrawBoard()
