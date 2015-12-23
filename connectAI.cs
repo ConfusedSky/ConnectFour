@@ -9,7 +9,7 @@
 
 using System;
 
-public class AI
+public class AI : IPlayer
 {
 	// Random instance this AI is using
 	private Random rand;
@@ -44,17 +44,18 @@ public class AI
 	}
 
 	// Lets the AI make its move
-	// takes the game its playing and a token its using
+	// takes the game its playing
 	// Chooses next move based on a tree of possible moves and min maxes its way up the tree
-	public void MakeMove( Game g )
+	public int MakeMove( Game g )
 	{
+		System.Console.WriteLine( "Computer is thinking..." );
 		// if any moves will result in a win use it
 		// and block any wins that the player might have
 		int i;
 
 		i = RecurseBestMove( new GameNode(g), 9 );
 
-		g.MakeMove( i, player );
+		return i;
 	}
 
 	// // recursive method to choose the best move based on a minmax tree
