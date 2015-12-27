@@ -9,7 +9,7 @@
 
 using System;
 
-public class OGAI
+public class OGAI : IPlayer
 {
 	private Random rand;
 	private bool player;
@@ -28,7 +28,7 @@ public class OGAI
 
 	// Lets the AI make its move
 	// takes the game its playing and a token its using
-	public void MakeMove( Game g )
+	public int MakeMove( Game g )
 	{
 		// game to test moves on
 		Game gprime;
@@ -37,13 +37,11 @@ public class OGAI
 		int i;
 		if( CanWin( g, player, out i ) )
 		{
-			g.MakeMove( i, player );
-			return;
+			return i;
 		}
 		if( CanWin( g, !player, out i ) )
 		{
-			g.MakeMove( i, player );
-			return;
+			return i;
 		}
 		// else choose a random move that wont give the player a win
 		int r;		
@@ -60,7 +58,7 @@ public class OGAI
 			tries++;		
 			// while the player can win in the next move or the next move is not valid		
 		} while( ( CanWin( gprime, !player, out i ) && tries < MAXTRIES ) || !valid  );		
-		g.MakeMove( r, player );
+		return r;
 	}	
 
 	// private helper function which determines if a player can win in one move

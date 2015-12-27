@@ -7,11 +7,13 @@ public class HumanPlayer : IPlayer
 	public int MakeMove( Game g )
 	{
 		int choice = -1;
-		Console.WriteLine( "Your Turn!" );
+		Console.Write( "Your Turn!" );
 		while( !g.MakeMove( choice = Console.ReadKey(true).KeyChar - '0', true ) )
 		{
-			Console.WriteLine( "Improper move try again\n" );
+			Console.Write( "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" );
+			Console.Write( "Improper move try again" );
 		}
+		Console.WriteLine();
 		return choice;
 	}
 }

@@ -154,7 +154,7 @@ public class Game
 	{
 		Random r = new Random();
 		IPlayer p1 = new HumanPlayer();
-		IPlayer p2 = new AI( false, r );
+		IPlayer p2 = new HumanPlayer();
 
 		Console.Clear();
 		DrawBoard();
