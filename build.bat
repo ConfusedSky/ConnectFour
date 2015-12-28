@@ -1,1 +1,1 @@
-mcs connectfour.cs connectAI.cs connectAIOG.cs IPlayer.cs HumanPlayer.cs /out:"connectfour v4.exe"
+mcs *.cs HumanPlayer.cs /out:"connectfour v4.exe"
