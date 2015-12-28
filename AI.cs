@@ -1,14 +1,6 @@
-//
-// connectAI.cs
-//
-// 6-9-15
-// Masa Maeda
-//
-// AI for connect four
-//
-
 using System;
 
+// Ai for connect 4
 public class AI : IPlayer
 {
 	// Random instance this AI is using

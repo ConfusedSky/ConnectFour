@@ -1,14 +1,6 @@
-//
-// connectAI.cs
-//
-// 6-9-15
-// Masa Maeda
-//
-// AI for connect four
-//
-
 using System;
 
+// Ai for playing connect four
 public class OGAI : IPlayer
 {
 	private Random rand;

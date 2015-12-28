@@ -1,14 +1,6 @@
-//
-// connectfour.cs
-//
-// 6-9-15
-// Masa Maeda
-//
-// Connect four program
-//
-
 using System;
 
+// Board that the connect 4 game is played on
 public class GameBoard
 {
 	// gameboard
@@ -147,58 +139,5 @@ public class GameBoard
 			}
 		}
 		return false;
-	}
-
-	// Plays a game and returns true if player 1 wins
-	public bool playGame()
-	{
-		Random r = new Random();
-		IPlayer p1 = new OGAI( true, r );
-		IPlayer p2 = new AI( false, r );
-
-		Console.Clear();
-		DrawBoard();
-
-		while( true )
-		{
-			MakeMove( p1.MakeMove( new GameBoard( Board ) ), true );
-
-			Console.Clear();
-			DrawBoard();
-
-			if( IsWinner( true ) )
-			{
-				Console.WriteLine( "Player 1 Wins!" );
-				return true;
-			}
-
-			MakeMove( p2.MakeMove( new GameBoard( Board ) ), false );
-
-			Console.Clear();
-			DrawBoard();
-
-			if( IsWinner( false ) )
-			{
-				Console.WriteLine( "Player 2 Wins!" );
-				return false;
-			}
-
-			if( !MovesAvailable() )
-			{
-				Console.WriteLine( "It's a draw!" );
-				return false;
-			}
-		}
-	}
-
-	public static void Main()
-	{
-		// Random r = new Random();
-		GameBoard g = new GameBoard();
-
-		g.playGame();
-
-		Console.WriteLine( "Press the any key to continue. . ." );
-		Console.ReadKey( true );
 	}
 }
