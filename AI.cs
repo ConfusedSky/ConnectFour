@@ -20,11 +20,11 @@ public class AI : IPlayer
 	private class GameNode
 	{
 		// gamestate this node represents
-		public Game Gamestate;
+		public GameBoard Gamestate;
 		// this node's score
 		public double Score;
 		// Constructor
-		public GameNode( Game g )
+		public GameNode( GameBoard g )
 		{
 			Gamestate = g;
 			Score = 0;
@@ -46,7 +46,7 @@ public class AI : IPlayer
 	// Lets the AI make its move
 	// takes the game its playing
 	// Chooses next move based on a tree of possible moves and min maxes its way up the tree
-	public int MakeMove( Game g )
+	public int MakeMove( GameBoard g )
 	{
 		System.Console.WriteLine( "Computer is thinking..." );
 		// if any moves will result in a win use it
@@ -96,7 +96,7 @@ public class AI : IPlayer
 				if( g.Gamestate.ValidMove( j ) )
 				{
 					// make a new node
-					g2 = new GameNode( new Game( g.Gamestate.Board ) );
+					g2 = new GameNode( new GameBoard( g.Gamestate.Board ) );
 					// make the move
 					g2.Gamestate.MakeMove( j, player );
 					// run this method again for the new move
@@ -132,7 +132,7 @@ public class AI : IPlayer
 				if( g.Gamestate.ValidMove( j ) )
 				{
 					// make a new node
-					g2 = new GameNode( new Game( g.Gamestate.Board ) );
+					g2 = new GameNode( new GameBoard( g.Gamestate.Board ) );
 					// make the move
 					g2.Gamestate.MakeMove( j, !player );
 					// run this method again for the new move
@@ -165,7 +165,7 @@ public class AI : IPlayer
 	}
 
 	// returns the value of the current gamestate
-	public static double CalculatePosition( Game g, bool player = true, bool debug = false )
+	public static double CalculatePosition( GameBoard g, bool player = true, bool debug = false )
 	{
 		// calculated value, positive if its our token negative if its theirs, current lines value, number of found tokens
 		double d = 0, x = 0, y = 0, n = 0, z = 0;
@@ -256,10 +256,10 @@ public class AI : IPlayer
 	}
 
 	// private helper function which determines if a player can win in one move
-	private bool CanWin( Game g, bool player, out int move )
+	private bool CanWin( GameBoard g, bool player, out int move )
 	{
 		move = 1;
-		Game gprime = new Game( g.Board );
+		GameBoard gprime = new GameBoard( g.Board );
 		for( int i = 1; i < 8; i++ )
 		{
 			gprime.MakeMove( i, player );
@@ -268,7 +268,7 @@ public class AI : IPlayer
 				move = i;
 				return true;
 			}
-			gprime = new Game( g.Board );
+			gprime = new GameBoard( g.Board );
 		}
 
 		return false;

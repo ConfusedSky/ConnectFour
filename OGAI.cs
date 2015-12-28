@@ -28,10 +28,10 @@ public class OGAI : IPlayer
 
 	// Lets the AI make its move
 	// takes the game its playing and a token its using
-	public int MakeMove( Game g )
+	public int MakeMove( GameBoard g )
 	{
 		// game to test moves on
-		Game gprime;
+		GameBoard gprime;
 		// if any moves will result in a win use it
 		// and block any wins that the player might have
 		int i;
@@ -53,7 +53,7 @@ public class OGAI : IPlayer
 		do 		
 		{		
 			r = rand.Next( 1, 8 );		
-			gprime = new Game( g.Board );		
+			gprime = new GameBoard( g.Board );		
 			valid = gprime.MakeMove( r, player );		
 			tries++;		
 			// while the player can win in the next move or the next move is not valid		
@@ -62,10 +62,10 @@ public class OGAI : IPlayer
 	}	
 
 	// private helper function which determines if a player can win in one move
-	private bool CanWin( Game g, bool player, out int move )
+	private bool CanWin( GameBoard g, bool player, out int move )
 	{
 		move = 1;
-		Game gprime = new Game( g.Board );
+		GameBoard gprime = new GameBoard( g.Board );
 		for( int i = 1; i < 8; i++ )
 		{
 			gprime.MakeMove( i, player );
@@ -74,7 +74,7 @@ public class OGAI : IPlayer
 				move = i;
 				return true;
 			}
-			gprime = new Game( g.Board );
+			gprime = new GameBoard( g.Board );
 		}
 
 		return false;

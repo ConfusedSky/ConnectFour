@@ -4,7 +4,7 @@ using System;
 public class HumanPlayer : IPlayer
 {
 	// Get input from keyboard
-	public int MakeMove( Game g )
+	public int MakeMove( GameBoard g )
 	{
 		int choice = -1;
 		Console.Write( "Your Turn!" );

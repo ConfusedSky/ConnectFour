@@ -9,7 +9,7 @@
 
 using System;
 
-public class Game
+public class GameBoard
 {
 	// gameboard
 	private char[,] _board;
@@ -22,7 +22,7 @@ public class Game
 	}
 
 	// public constuctor
-	public Game()
+	public GameBoard()
 	{
 		_board = new char[6,7];
 		for( int i = 0; i < 6; i++ )
@@ -35,7 +35,7 @@ public class Game
 	}
 
 	// copy constuctor
-	public Game( char[,] b )
+	public GameBoard( char[,] b )
 	{
 		_board = new char[6,7];
 		Array.Copy( b, _board, 6*7 );
@@ -153,15 +153,15 @@ public class Game
 	public bool playGame()
 	{
 		Random r = new Random();
-		IPlayer p1 = new HumanPlayer();
-		IPlayer p2 = new HumanPlayer();
+		IPlayer p1 = new OGAI( true, r );
+		IPlayer p2 = new AI( false, r );
 
 		Console.Clear();
 		DrawBoard();
 
 		while( true )
 		{
-			MakeMove( p1.MakeMove( new Game( Board ) ), true );
+			MakeMove( p1.MakeMove( new GameBoard( Board ) ), true );
 
 			Console.Clear();
 			DrawBoard();
@@ -172,7 +172,7 @@ public class Game
 				return true;
 			}
 
-			MakeMove( p2.MakeMove( new Game( Board ) ), false );
+			MakeMove( p2.MakeMove( new GameBoard( Board ) ), false );
 
 			Console.Clear();
 			DrawBoard();
@@ -194,7 +194,7 @@ public class Game
 	public static void Main()
 	{
 		// Random r = new Random();
-		Game g = new Game();
+		GameBoard g = new GameBoard();
 
 		g.playGame();
 
