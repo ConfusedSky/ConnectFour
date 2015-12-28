@@ -49,7 +49,7 @@ public class Game
 		IPlayer p1 = new OGAI( true, r );
 		IPlayer p2 = new AI( false, r );
 
-		PlayGame();
+		PlayGame( p1, p2 );
 
 		Console.WriteLine( "Press the any key to continue. . ." );
 		Console.ReadKey( true );
