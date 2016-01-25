@@ -32,12 +32,6 @@ public abstract class Player
 		}
 	}
 
-	public Player( bool p )
-	{
-		rand = new Random();
-		player = p;
-	}
-
 	public Player( bool p, Random r )
 	{
 		rand = r;

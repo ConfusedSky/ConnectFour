@@ -61,8 +61,7 @@ public class Game
 		Player p1;
 		Player p2;
 
-		// PlayGame( p1, p2 );
-
+		// Find all the types that are decendants of player and therefore can be played with
 		var playerTypes = typeof( Player ).Assembly.GetTypes().Where( (x) => x.BaseType == typeof( Player ) ).ToArray();
 
 		Console.WriteLine( "Choose Player 1's type: " );
@@ -72,7 +71,11 @@ public class Game
 			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
 		}
 
-		GetChoice( playerTypes.Count() );
+		Type p1Type = playerTypes[ GetChoice( playerTypes.Count() ) ];
+
+		Console.WriteLine();
+
+		Console.WriteLine( "Player 1 chose {0}", p1Type );
 
 		Console.WriteLine();
 
@@ -83,9 +86,21 @@ public class Game
 			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
 		}
 
-		GetChoice( playerTypes.Count() );
+		Type p2Type = playerTypes[ GetChoice( playerTypes.Count() ) ];
 
 		Console.WriteLine();
+
+		Console.WriteLine( "Player 2 chose {0}", p2Type );
+
+		Console.WriteLine();
+
+		p1 = (Player)Activator.CreateInstance( p1Type, new object[] { true, r } );
+		p2 = (Player)Activator.CreateInstance( p2Type, new object[] { false, r } );
+
+		Console.WriteLine( "Press the any key to continue. . ." );
+		Console.ReadKey( true );
+
+		PlayGame( p1, p2 );
 
 		Console.WriteLine( "Press the any key to continue. . ." );
 		Console.ReadKey( true );
