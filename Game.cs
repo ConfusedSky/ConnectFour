@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 // This class contains logic for playing games
 public class Game
@@ -43,13 +44,48 @@ public class Game
 		}
 	}
 
+	private static int GetChoice( int count )
+	{
+		int choice = Console.ReadKey(true).KeyChar - '0';
+		while( choice > count || choice < 1 )
+		{
+			Console.WriteLine( "Improper choice try again" );
+			choice = Console.ReadKey(true).KeyChar - '0';
+		}
+		return choice - 1 ;
+	}
+
 	public static void Main()
 	{
 		Random r = new Random();
-		IPlayer p1 = new OGAI( true, r );
-		IPlayer p2 = new AI( false, r );
+		IPlayer p1;
+		IPlayer p2;
 
-		PlayGame( p1, p2 );
+		// PlayGame( p1, p2 );
+
+		var playerTypes = typeof( IPlayer ).Assembly.GetTypes().Where( (x) => x.GetInterfaces().Count( (y) => y == typeof( IPlayer ) ) == 1 ).ToArray();
+
+		Console.WriteLine( "Choose Player 1's type: " );
+
+		for( int i = 0; i < playerTypes.Count(); i++ )
+		{
+			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
+		}
+
+		GetChoice( playerTypes.Count() );
+
+		Console.WriteLine();
+
+		Console.WriteLine( "Choose Player 2's type: " );
+
+		for( int i = 0; i < playerTypes.Count(); i++ )
+		{
+			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
+		}
+
+		GetChoice( playerTypes.Count() );
+
+		Console.WriteLine();
 
 		Console.WriteLine( "Press the any key to continue. . ." );
 		Console.ReadKey( true );
