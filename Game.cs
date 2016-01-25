@@ -103,18 +103,81 @@ public static class Game
 		p2 = (Player)Activator.CreateInstance( p2Type, new object[] { false, r } );
 	}
 
+	private static int GetInt()
+	{
+		string number = "";
+		ConsoleKeyInfo key;
+
+		do
+		{
+			key = Console.ReadKey(true);
+
+			// Backspace Should Not Work
+			if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter && key.Key != ConsoleKey.Spacebar && key.KeyChar >= '0' && key.KeyChar <= '9' )
+			{
+   				number += key.KeyChar;
+   				Console.Write( key.KeyChar );
+			}
+			else if (key.Key == ConsoleKey.Backspace && number.Length > 0)
+			{
+      			number = number.Substring(0, (number.Length - 1));
+    			Console.Write( "\b \b" );
+			}
+		} while( key.Key != ConsoleKey.Enter );
+
+		if( number == "" )
+			return 0;
+
+		return Int32.Parse( number );
+	}
+
+	// Single Game, Manual Choice
+	public static void SGMC( Type[] playerTypes, Random r )
+	{
+		Player p1;
+		Player p2;
+
+		ManualChoice( playerTypes, r, out p1, out p2 );
+
+		Console.WriteLine( "Press the any key to continue. . ." );
+		Console.ReadKey( true );
+
+		PlayGame( p1, p2 );
+	}
+
+	// X Games, Manual Choice
+	public static void XGMC( Type[] playerTypes, Random r )
+	{
+		Player p1;
+		Player p2;
+		
+		Console.Write( "How many games do you want to play?: ");
+		int nGames = GetInt();
+
+		Console.WriteLine();
+		Console.WriteLine();
+
+		ManualChoice( playerTypes, r, out p1, out p2 );
+
+		Console.WriteLine( "Press the any key to continue. . ." );
+		Console.ReadKey( true );
+
+		for( int i = 0; i < nGames; i++ )
+		{
+			PlayGame( p1, p2 );
+		}
+	}
+
 	public static void Main()
 	{
 		Random r = new Random();
-		Player p1;
-		Player p2;
 
 		// Find all the types that are decendants of player in this assembly and therefore can be played with
 		Type[] playerTypes = typeof( Player ).Assembly.GetTypes().Where( (x) => x.BaseType == typeof( Player ) ).ToArray();
 
 		Console.WriteLine( "Choose gamemode:" );
-		Console.WriteLine( "1. Single game, Manual Choice" );
-		Console.WriteLine( "2. x games, Manual Choice" );
+		Console.WriteLine( "1. Single Game, Manual Choice" );
+		Console.WriteLine( "2. x Games, Manual Choice" );
 		Console.WriteLine();
 
 		int choice = GetChoice( 2 );
@@ -122,29 +185,10 @@ public static class Game
 		switch( choice )
 		{
 			case 1:
-				ManualChoice( playerTypes, r, out p1, out p2 );
-
-				Console.WriteLine( "Press the any key to continue. . ." );
-				Console.ReadKey( true );
-
-				PlayGame( p1, p2 );
+				SGMC( playerTypes, r );
 				break;
 			case 2:
-				Console.Write( "How many games do you want to play?: ");
-				int nGames = GetChoice( 100 );
-
-				Console.WriteLine();
-				Console.WriteLine();
-
-				ManualChoice( playerTypes, r, out p1, out p2 );
-
-				Console.WriteLine( "Press the any key to continue. . ." );
-				Console.ReadKey( true );
-
-				for( int i = 0; i < nGames; i++ )
-				{
-					PlayGame( p1, p2 );
-				}
+				XGMC( playerTypes, r );
 				break;
 			default:
 				// Shouldn't ever happen
