@@ -54,7 +54,7 @@ public static class Game
 		}
 	}
 
-	// Gets a choice from 1 to count inclusive 
+	// Gets a choice from 1 to count inclusive only allows a single character
 	private static int GetChoice( int count )
 	{
 		int choice = Console.ReadKey(true).KeyChar - '0';
@@ -113,12 +113,27 @@ public static class Game
 		Type[] playerTypes = typeof( Player ).Assembly.GetTypes().Where( (x) => x.BaseType == typeof( Player ) ).ToArray();
 
 		Console.WriteLine( "Choose gamemode:" );
-		Console.WriteLine( "1. Single game, Manual Choice");
+		Console.WriteLine( "1. Single game, Manual Choice" );
+		Console.WriteLine( "2. x games, Manual Choice" );
+		Console.WriteLine();
 
-		int choice = GetChoice( 1 );
+		int choice = GetChoice( 2 );
+
 		switch( choice )
 		{
 			case 1:
+				ManualChoice( playerTypes, r, out p1, out p2 );
+
+				Console.WriteLine( "Press the any key to continue. . ." );
+				Console.ReadKey( true );
+
+				PlayGame( p1, p2 );
+				break;
+			case 2:
+				Console.Write( "How many games do you want to play?: ");
+				int nGames = GetChoice( 100 );
+
+				Console.WriteLine();
 				Console.WriteLine();
 
 				ManualChoice( playerTypes, r, out p1, out p2 );
@@ -126,7 +141,10 @@ public static class Game
 				Console.WriteLine( "Press the any key to continue. . ." );
 				Console.ReadKey( true );
 
-				PlayGame( p1, p2 );
+				for( int i = 0; i < nGames; i++ )
+				{
+					PlayGame( p1, p2 );
+				}
 				break;
 			default:
 				// Shouldn't ever happen
