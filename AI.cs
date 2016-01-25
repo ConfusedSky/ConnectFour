@@ -25,7 +25,7 @@ public class AI : Player
 	// Chooses next move based on a tree of possible moves and min maxes its way up the tree
 	public override int MakeMove( GameBoard g )
 	{
-		System.Console.WriteLine( "Computer is thinking..." );
+		Console.WriteLine( "Computer is thinking..." );
 		// if any moves will result in a win use it
 		// and block any wins that the player might have
 		int i;

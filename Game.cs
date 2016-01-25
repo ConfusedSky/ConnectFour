@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 
 // This class contains logic for playing games
-public class Game
+public static class Game
 {
 	// Plays a game and returns true if player 1 wins
 	public static bool PlayGame( Player p1, Player p2 )
