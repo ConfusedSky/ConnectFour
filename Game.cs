@@ -44,6 +44,7 @@ public static class Game
 		}
 	}
 
+	// Gets a choice from 1 to count inclusive 
 	private static int GetChoice( int count )
 	{
 		int choice = Console.ReadKey(true).KeyChar - '0';
@@ -52,18 +53,11 @@ public static class Game
 			Console.WriteLine( "Improper choice try again" );
 			choice = Console.ReadKey(true).KeyChar - '0';
 		}
-		return choice - 1 ;
+		return choice;
 	}
 
-	public static void Main()
+	private static void ManualChoice( Type[] playerTypes, Random r, out Player p1, out Player p2 )
 	{
-		Random r = new Random();
-		Player p1;
-		Player p2;
-
-		// Find all the types that are decendants of player and therefore can be played with
-		var playerTypes = typeof( Player ).Assembly.GetTypes().Where( (x) => x.BaseType == typeof( Player ) ).ToArray();
-
 		Console.WriteLine( "Choose Player 1's type: " );
 
 		for( int i = 0; i < playerTypes.Count(); i++ )
@@ -71,7 +65,7 @@ public static class Game
 			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
 		}
 
-		Type p1Type = playerTypes[ GetChoice( playerTypes.Count() ) ];
+		Type p1Type = playerTypes[ GetChoice( playerTypes.Count() ) - 1 ];
 
 		Console.WriteLine();
 
@@ -86,7 +80,7 @@ public static class Game
 			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
 		}
 
-		Type p2Type = playerTypes[ GetChoice( playerTypes.Count() ) ];
+		Type p2Type = playerTypes[ GetChoice( playerTypes.Count() ) - 1 ];
 
 		Console.WriteLine();
 
@@ -96,11 +90,38 @@ public static class Game
 
 		p1 = (Player)Activator.CreateInstance( p1Type, new object[] { true, r } );
 		p2 = (Player)Activator.CreateInstance( p2Type, new object[] { false, r } );
+	}
 
-		Console.WriteLine( "Press the any key to continue. . ." );
-		Console.ReadKey( true );
+	public static void Main()
+	{
+		Random r = new Random();
+		Player p1;
+		Player p2;
 
-		PlayGame( p1, p2 );
+		// Find all the types that are decendants of player and therefore can be played with
+		Type[] playerTypes = typeof( Player ).Assembly.GetTypes().Where( (x) => x.BaseType == typeof( Player ) ).ToArray();
+
+		Console.WriteLine( "Choose gamemode:" );
+		Console.WriteLine( "1. Single game, Manual Choice");
+
+		int choice = GetChoice( 1 );
+		switch( choice )
+		{
+			case 1:
+				Console.WriteLine();
+
+				ManualChoice( playerTypes, r, out p1, out p2 );
+
+				Console.WriteLine( "Press the any key to continue. . ." );
+				Console.ReadKey( true );
+
+				PlayGame( p1, p2 );
+				break;
+			default:
+				// Shouldn't ever happen
+				Console.WriteLine( choice + " is an invalid choice." );
+				break;
+		}
 
 		Console.WriteLine( "Press the any key to continue. . ." );
 		Console.ReadKey( true );
