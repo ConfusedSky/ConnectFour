@@ -150,7 +150,9 @@ public static class Game
 	{
 		Player p1;
 		Player p2;
-		
+
+		int totalWins = 0, totalLosses = 0, totalTies = 0;
+
 		Console.Write( "How many games do you want to play?: ");
 		int nGames = GetInt();
 
@@ -164,8 +166,27 @@ public static class Game
 
 		for( int i = 0; i < nGames; i++ )
 		{
-			PlayGame( p1, p2 );
+			switch ( PlayGame( p1, p2 ) )
+			{
+				case GameResult.Win:
+					totalWins++;
+					break;
+				case GameResult.Loss:
+					totalLosses++;
+					break;
+				default:
+					totalTies++;
+					break;
+
+			}
 		}
+
+		Console.WriteLine( "Results" );
+		Console.WriteLine( "-------" );
+		Console.WriteLine( "Total Wins(Percent): {0}({1}%)", totalWins, (double)totalWins/nGames*100 );
+		Console.WriteLine( "Total Losses(Percent): {0}({1}%)", totalLosses, (double)totalLosses/nGames*100 );
+		Console.WriteLine( "Total Ties(Percent): {0}({1}%)", totalTies, (double)totalTies/nGames*100 );
+		Console.WriteLine();
 	}
 
 	public static void Main()
