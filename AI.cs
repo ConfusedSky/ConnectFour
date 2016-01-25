@@ -1,12 +1,9 @@
 using System;
 
 // Ai for connect 4
-public class AI : IPlayer
+public class AI : Player
 {
-	// Random instance this AI is using
-	private Random rand;
-	// Whether this is an X(true) or an O(false)
-	private bool player;
+	public AI( bool p, Random r ) : base( p, r ){}
 
 	// Node that represents a move in the tree
 	private class GameNode
@@ -23,22 +20,10 @@ public class AI : IPlayer
 		}
 	}
 
-	public AI( bool p )
-	{
-		rand = new Random();
-		player = p;
-	}
-
-	public AI( bool p, Random r )
-	{
-		rand = r;
-		player = p;
-	}
-
 	// Lets the AI make its move
 	// takes the game its playing
 	// Chooses next move based on a tree of possible moves and min maxes its way up the tree
-	public int MakeMove( GameBoard g )
+	public override int MakeMove( GameBoard g )
 	{
 		System.Console.WriteLine( "Computer is thinking..." );
 		// if any moves will result in a win use it

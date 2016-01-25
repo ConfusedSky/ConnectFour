@@ -1,26 +1,13 @@
 using System;
 
 // Ai for playing connect four
-public class OGAI : IPlayer
+public class OGAI : Player
 {
-	private Random rand;
-	private bool player;
-
-	public OGAI( bool p )
-	{
-		rand = new Random();
-		player = p;
-	}
-
-	public OGAI( bool p, Random r )
-	{
-		rand = r;
-		player = p;
-	}
+	public OGAI( bool p, Random r ) : base( p, r ){}
 
 	// Lets the AI make its move
 	// takes the game its playing and a token its using
-	public int MakeMove( GameBoard g )
+	public override int MakeMove( GameBoard g )
 	{
 		// game to test moves on
 		GameBoard gprime;

@@ -1,17 +1,12 @@
 using System;
 
 // This is a human player
-public class HumanPlayer : IPlayer
+public class HumanPlayer : Player
 {
-	private bool player;
-
-	public HumanPlayer( bool player )
-	{
-		this.player = player;
-	}
+	public HumanPlayer( bool p, Random r ) : base( p, r ){}
 
 	// Get input from keyboard
-	public int MakeMove( GameBoard g )
+	public override int MakeMove( GameBoard g )
 	{
 		int choice = -1;
 		Console.Write( "Your Turn!" );

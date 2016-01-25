@@ -5,7 +5,7 @@ using System.Linq;
 public class Game
 {
 	// Plays a game and returns true if player 1 wins
-	public static bool PlayGame( IPlayer p1, IPlayer p2 )
+	public static bool PlayGame( Player p1, Player p2 )
 	{
 		GameBoard g = new GameBoard();
 
@@ -58,12 +58,12 @@ public class Game
 	public static void Main()
 	{
 		Random r = new Random();
-		IPlayer p1;
-		IPlayer p2;
+		Player p1;
+		Player p2;
 
 		// PlayGame( p1, p2 );
 
-		var playerTypes = typeof( IPlayer ).Assembly.GetTypes().Where( (x) => x.GetInterfaces().Count( (y) => y == typeof( IPlayer ) ) == 1 ).ToArray();
+		var playerTypes = typeof( Player ).Assembly.GetTypes().Where( (x) => x.BaseType == typeof( Player ) ).ToArray();
 
 		Console.WriteLine( "Choose Player 1's type: " );
 
