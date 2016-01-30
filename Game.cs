@@ -103,6 +103,14 @@ public static class Game
 		p2 = (Player)Activator.CreateInstance( p2Type, new object[] { false, r } );
 	}
 
+	// Allows the players to be swaped
+	private static void Swap( Random r, ref Player p1, ref Player p2 )
+	{
+		Player t = p1;
+		p1 = (Player)Activator.CreateInstance( p2.GetType(), new object[] { true, r } );
+		p2 = (Player)Activator.CreateInstance( t.GetType(), new object[] { false, r } );
+	}
+
 	private static int GetInt()
 	{
 		string number = "";
@@ -181,11 +189,85 @@ public static class Game
 			}
 		}
 
+		Console.Clear();
+
 		Console.WriteLine( "Results" );
 		Console.WriteLine( "-------" );
 		Console.WriteLine( "Total Wins(Percent): {0}({1}%)", totalWins, (double)totalWins/nGames*100 );
 		Console.WriteLine( "Total Losses(Percent): {0}({1}%)", totalLosses, (double)totalLosses/nGames*100 );
 		Console.WriteLine( "Total Ties(Percent): {0}({1}%)", totalTies, (double)totalTies/nGames*100 );
+		Console.WriteLine();
+	}
+
+	// X Games, Manual Choice, Swap, X Games
+	public static void XGMCS( Type[] playerTypes, Random r )
+	{
+		Player p1;
+		Player p2;
+
+		int totalWins = 0, totalLosses = 0, totalTies = 0;
+		int totalWinsSwap = 0, totalLossesSwap = 0, totalTiesSwap = 0;
+
+		Console.Write( "How many games do you want to play?: ");
+		int nGames = GetInt();
+
+		Console.WriteLine();
+		Console.WriteLine();
+
+		ManualChoice( playerTypes, r, out p1, out p2 );
+
+		Console.WriteLine( "Press the any key to continue. . ." );
+		Console.ReadKey( true );
+
+		for( int i = 0; i < nGames; i++ )
+		{
+			switch ( PlayGame( p1, p2 ) )
+			{
+				case GameResult.Win:
+					totalWins++;
+					break;
+				case GameResult.Loss:
+					totalLosses++;
+					break;
+				default:
+					totalTies++;
+					break;
+
+			}
+		}
+
+		Swap( r, ref p1, ref p2 );
+
+		for( int i = 0; i < nGames; i++ )
+		{
+			switch ( PlayGame( p1, p2 ) )
+			{
+				case GameResult.Win:
+					totalWinsSwap++;
+					break;
+				case GameResult.Loss:
+					totalLossesSwap++;
+					break;
+				default:
+					totalTiesSwap++;
+					break;
+
+			}
+		}
+
+		Console.Clear();
+
+		Console.WriteLine( "Results({0} first)", p2.GetType() );
+		Console.WriteLine( "-------" );
+		Console.WriteLine( "Total Wins(Percent): {0}({1}%)", totalWins, (double)totalWins/nGames*100 );
+		Console.WriteLine( "Total Losses(Percent): {0}({1}%)", totalLosses, (double)totalLosses/nGames*100 );
+		Console.WriteLine( "Total Ties(Percent): {0}({1}%)", totalTies, (double)totalTies/nGames*100 );
+		Console.WriteLine();
+		Console.WriteLine( "Results({0} first)", p1.GetType() );
+		Console.WriteLine( "-------" );
+		Console.WriteLine( "Total Wins(Percent): {0}({1}%)", totalWinsSwap, (double)totalWinsSwap/nGames*100 );
+		Console.WriteLine( "Total Losses(Percent): {0}({1}%)", totalLossesSwap, (double)totalLossesSwap/nGames*100 );
+		Console.WriteLine( "Total Ties(Percent): {0}({1}%)", totalTiesSwap, (double)totalTiesSwap/nGames*100 );
 		Console.WriteLine();
 	}
 
@@ -198,10 +280,11 @@ public static class Game
 
 		Console.WriteLine( "Choose gamemode:" );
 		Console.WriteLine( "1. Single Game, Manual Choice" );
-		Console.WriteLine( "2. x Games, Manual Choice" );
+		Console.WriteLine( "2. X Games, Manual Choice" );
+		Console.WriteLine( "3. X Games, Manual Choice, Swap, X Games" );
 		Console.WriteLine();
 
-		int choice = GetChoice( 2 );
+		int choice = GetChoice( 3 );
 
 		switch( choice )
 		{
@@ -210,6 +293,9 @@ public static class Game
 				break;
 			case 2:
 				XGMC( playerTypes, r );
+				break;
+			case 3:
+				XGMCS( playerTypes, r );
 				break;
 			default:
 				// Shouldn't ever happen

@@ -30,7 +30,7 @@ public class AI : Player
 		// and block any wins that the player might have
 		int i;
 
-		i = RecurseBestMove( new GameNode(g), 8 );
+		i = RecurseBestMove( new GameNode(g), 3 );
 
 		return i;
 	}
