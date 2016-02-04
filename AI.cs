@@ -141,7 +141,7 @@ public class AI : Player
 		return i;
 	}
 
-	// returns the value of the current gamestate
+	// // returns the value of the current gamestate
 	public static double CalculatePosition( GameBoard g, bool player = true, bool debug = false )
 	{
 		// calculated value, positive if its our token negative if its theirs, current lines value, number of found tokens

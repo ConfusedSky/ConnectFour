@@ -26,7 +26,7 @@ public abstract class Player
 		{
 			return _player;
 		}
-		private set
+		set
 		{
 			_player = value;
 		}

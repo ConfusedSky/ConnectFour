@@ -164,6 +164,13 @@ public static class Game
 		Console.Write( "How many games do you want to play?: ");
 		int nGames = GetInt();
 
+		while( nGames < 1 )
+		{
+			Console.WriteLine();
+			Console.Write( "You must enter a positive integer for the number of games to play. Try again: " ); 
+			nGames = GetInt();
+		}
+
 		Console.WriteLine();
 		Console.WriteLine();
 
@@ -210,6 +217,13 @@ public static class Game
 
 		Console.Write( "How many games do you want to play?: ");
 		int nGames = GetInt();
+
+		while( nGames < 1 )
+		{
+			Console.WriteLine();
+			Console.Write( "You must enter a positive integer for the number of games to play. Try again: " ); 
+			nGames = GetInt();
+		}
 
 		Console.WriteLine();
 		Console.WriteLine();
@@ -271,6 +285,24 @@ public static class Game
 		Console.WriteLine();
 	}
 
+	public static void ConnectToServer( Type[] playerTypes, Random r )
+	{	
+		Console.WriteLine( "Choose a player type: " );
+
+		for( int i = 0; i < playerTypes.Count(); i++ )
+		{
+			Console.WriteLine( "{0}. {1}", i+1, playerTypes[i] );
+		}
+
+		Type p1Type = playerTypes[ GetChoice( playerTypes.Count() ) - 1 ];
+
+		Console.WriteLine();
+
+		Console.WriteLine( "You chose {0}", p1Type );
+
+		Console.WriteLine();
+	}
+
 	public static void Main()
 	{
 		Random r = new Random();
@@ -282,9 +314,10 @@ public static class Game
 		Console.WriteLine( "1. Single Game, Manual Choice" );
 		Console.WriteLine( "2. X Games, Manual Choice" );
 		Console.WriteLine( "3. X Games, Manual Choice, Swap, X Games" );
+		Console.WriteLine( "4. Connect to another client through RemotePlayer" );
 		Console.WriteLine();
 
-		int choice = GetChoice( 3 );
+		int choice = GetChoice( 4 );
 
 		switch( choice )
 		{
@@ -297,9 +330,12 @@ public static class Game
 			case 3:
 				XGMCS( playerTypes, r );
 				break;
+			case 4:
+				ConnectToServer( playerTypes, r );
+				break;
 			default:
-				// Shouldn't ever happen
-				Console.WriteLine( choice + " is an invalid choice." );
+				Console.WriteLine( choice + " has not been implemented yet." );
+				Console.WriteLine();
 				break;
 		}
 
