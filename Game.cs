@@ -1,6 +1,11 @@
 using System;
 using System.Linq;
 
+using System.Net;
+using System.Net.Sockets;
+
+using System.Text;
+
 // This class contains logic for playing games
 public static class Game
 {
@@ -287,6 +292,8 @@ public static class Game
 
 	public static void ConnectToServer( Type[] playerTypes, Random r )
 	{	
+		Player p = null;
+
 		Console.WriteLine( "Choose a player type: " );
 
 		for( int i = 0; i < playerTypes.Count(); i++ )
@@ -301,6 +308,88 @@ public static class Game
 		Console.WriteLine( "You chose {0}", p1Type );
 
 		Console.WriteLine();
+
+        byte[] data = new byte[1024];
+
+        bool player = true;
+
+        int bytesRecv, move;
+
+        String message;
+        String[] splitMessage;
+
+        try {
+            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress,11000);
+
+            // Create a TCP/IP  socket.
+            Socket sender = new Socket(AddressFamily.InterNetwork, 
+                SocketType.Stream, ProtocolType.Tcp );
+
+            // Connect the socket to the remote endpoint. Catch any errors.
+            try {
+                sender.Connect(remoteEP);
+
+                Console.WriteLine("Game connected to {0}",
+                    sender.RemoteEndPoint.ToString());
+
+                bytesRecv = sender.Receive( data );
+                message = Encoding.ASCII.GetString( data, 0, bytesRecv );
+
+                Console.WriteLine( "Connection confirmed" );
+                Console.WriteLine( message );
+
+                splitMessage = message.Split( new char[] { ' ' } );
+                if( splitMessage[0] == "Connected" )
+                {
+                	player = splitMessage[1][0] == 'X';
+                	p = (Player)Activator.CreateInstance( p1Type, new object[] { player, r } );
+                }
+                else
+                {
+                	Console.WriteLine( "Houston we have a problem..." );
+                	sender.Shutdown(SocketShutdown.Both);
+                	sender.Close();
+                	return;
+                }
+
+                do
+                {
+                	bytesRecv = sender.Receive( data );
+                	message = Encoding.ASCII.GetString( data, 0, bytesRecv );
+                	splitMessage = message.Split( new char[] { ' ' } );
+
+                	Console.WriteLine( message );
+
+                	if( splitMessage[0] == "Move" )
+                	{
+                		move = p.MakeMove( new GameBoard( RemotePlayer.DecerealizeBoard( message ) ) );
+
+                		message = "Move " + move;
+
+                		data = Encoding.ASCII.GetBytes( message );
+
+                		sender.Send( data );
+                	}
+
+                } while ( message.Trim() != "Disconect" );
+
+                // Release the socket.
+                sender.Shutdown(SocketShutdown.Both);
+                sender.Close();
+
+            } catch (ArgumentNullException ane) {
+                Console.WriteLine("ArgumentNullException : {0}",ane.ToString());
+            } catch (SocketException se) {
+                Console.WriteLine("SocketException : {0}",se.ToString());
+            } catch (Exception e) {
+                Console.WriteLine("Unexpected exception : {0}", e.ToString());
+            }
+
+        } catch (Exception e) {
+            Console.WriteLine( e.ToString());
+        }
 	}
 
 	public static void Main()

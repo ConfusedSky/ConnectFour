@@ -20,13 +20,13 @@ public abstract class Player
 		}
 	}
 
-	protected bool player
+	public bool player
 	{
 		get
 		{
 			return _player;
 		}
-		set
+		private set 
 		{
 			_player = value;
 		}
