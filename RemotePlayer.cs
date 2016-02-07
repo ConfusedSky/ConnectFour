@@ -31,9 +31,7 @@ public class RemotePlayer : Player
 
             Console.WriteLine( connection.RemoteEndPoint.ToString() );
 
-            byte[] message = Encoding.ASCII.GetBytes( "Connected " + ( (player)?('X'):('O') ) );
-
-            connection.Send( message );
+            SendString( connection, "Connected " + ( (player)?('X'):('O') ) );
         } 
         catch (Exception e) 
         {
@@ -45,8 +43,7 @@ public class RemotePlayer : Player
 	{
 		try
 		{
-			byte[] message = Encoding.ASCII.GetBytes( "Disconect" );
-			connection.Send( message );
+			SendString( connection, "Disconect" );
 
 			connection.Shutdown( SocketShutdown.Both );
 			connection.Close();
@@ -59,19 +56,16 @@ public class RemotePlayer : Player
 
 	public override int MakeMove( GameBoard g )
 	{
-		int bytesRecv, result;
-		byte[] data;
+		int result;
+		string message;
 
-		connection.Send( Encoding.ASCII.GetBytes( CerealizeBoard( g ) ) );
+		SendString( connection, CerealizeBoard( g ) );
 		Console.WriteLine( "Waiting for response..." );
 
 		while( true )
 		{
-			data = new byte[1024];
-
-			bytesRecv = connection.Receive( data );
-
-			result = DecerealizeMove( Encoding.ASCII.GetString( data, 0, bytesRecv ) );
+			message = ReceiveString( connection );
+			result = DecerealizeMove( message );
 
 			if( result == -1 )
 			{
@@ -84,7 +78,7 @@ public class RemotePlayer : Player
 				break;
 			}
 		}
-		return 1;
+		return result;
 	}
 
 	public static string CerealizeBoard( GameBoard g )
@@ -137,5 +131,28 @@ public class RemotePlayer : Player
 		}
 
 		return board;
+	}
+
+	public static void SendString( Socket s, string str )
+	{
+		s.Send( Encoding.ASCII.GetBytes( str + "<EOF>" ) );
+	}
+
+	public static string ReceiveString( Socket s )
+	{
+		byte[] data;
+		string result = "";
+
+		while (true) 
+		{
+		    data = new byte[1024];
+		    int bytesRec = s.Receive(data);
+		    result += Encoding.ASCII.GetString(data,0,bytesRec);
+		    if (result.IndexOf("<EOF>") > -1) {
+		        break;
+		    }
+		}
+
+		return result.Substring( 0, result.Length - 5 );
 	}
 }

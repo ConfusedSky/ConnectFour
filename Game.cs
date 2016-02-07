@@ -309,11 +309,9 @@ public static class Game
 
 		Console.WriteLine();
 
-        byte[] data = new byte[1024];
-
         bool player = true;
 
-        int bytesRecv, move;
+        int move;
 
         String message;
         String[] splitMessage;
@@ -334,8 +332,7 @@ public static class Game
                 Console.WriteLine("Game connected to {0}",
                     sender.RemoteEndPoint.ToString());
 
-                bytesRecv = sender.Receive( data );
-                message = Encoding.ASCII.GetString( data, 0, bytesRecv );
+                message = RemotePlayer.ReceiveString( sender );
 
                 Console.WriteLine( "Connection confirmed" );
                 Console.WriteLine( message );
@@ -356,8 +353,8 @@ public static class Game
 
                 do
                 {
-                	bytesRecv = sender.Receive( data );
-                	message = Encoding.ASCII.GetString( data, 0, bytesRecv );
+                	message = RemotePlayer.ReceiveString( sender );
+
                 	splitMessage = message.Split( new char[] { ' ' } );
 
                 	Console.WriteLine( message );
@@ -368,9 +365,7 @@ public static class Game
 
                 		message = "Move " + move;
 
-                		data = Encoding.ASCII.GetBytes( message );
-
-                		sender.Send( data );
+                		RemotePlayer.SendString( sender, message );
                 	}
 
                 } while ( message.Trim() != "Disconect" );
